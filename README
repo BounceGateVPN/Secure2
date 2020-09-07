@@ -1,0 +1,2 @@
+JVM arg
+-Djdk.crypto.KeyAgreement.legacyKDF=true
