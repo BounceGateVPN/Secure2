@@ -1,5 +1,7 @@
 package com.github.smallru8.Secure2.DH.Test;
 
+import java.io.UnsupportedEncodingException;
+
 import com.github.smallru8.Secure2.DH.DHRecver;
 import com.github.smallru8.Secure2.DH.DHSender;
 
@@ -7,16 +9,22 @@ public class Test1 {
 	/*
 	 * DH流程
 	 */
-	public static void main( String[] args ) {
+	public static void main( String[] args ) throws UnsupportedEncodingException {
 		DHSender ds = new DHSender();
 		DHRecver dr = new DHRecver(ds.getPublicKey());
 		ds.initAESKey(dr.getPublicKey());
 		
-		byte[] sendResult = ds.encrypt("Hello".getBytes());
+		byte[] sendResult = ds.encrypt("defaultSwitch\ntest\ntest".getBytes("UTF-8"));
         System.out.println("sendResult ："+new String(sendResult));
         
         byte[] receiverResult = dr.decryption(sendResult);
-        System.out.println("receiverResult : "+new String (receiverResult));
+        System.out.println("receiverResult : "+new String (receiverResult,"UTF-8"));
+        
+        byte[] sendResult2 = dr.encrypt("Hello".getBytes("UTF-8"));
+        System.out.println("sendResult ："+new String(sendResult2));
+        
+        byte[] receiverResult2 = ds.decryption(sendResult2);
+        System.out.println("receiverResult : "+new String (receiverResult2,"UTF-8"));
 		
 	}
 }
