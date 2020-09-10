@@ -88,6 +88,7 @@ public class SQL {
 			ResultSet tables = dbm.getTables(null, null, confName, null);
 			if (!tables.next()) {
 				stmt = conn.createStatement();
+				System.out.println(sqlstmt0+confName+sqlstmt1);
 				stmt.executeUpdate(sqlstmt0+confName+sqlstmt1);
 			}
 		} catch (SQLException e) {
