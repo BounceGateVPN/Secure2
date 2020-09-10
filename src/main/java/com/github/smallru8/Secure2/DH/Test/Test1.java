@@ -14,10 +14,10 @@ public class Test1 {
 		DHRecver dr = new DHRecver(ds.getPublicKey());
 		ds.initAESKey(dr.getPublicKey());
 		
-		byte[] sendResult = ds.encrypt("defaultSwitch\ntest\ntest".getBytes("UTF-8"));
-        System.out.println("sendResult ："+new String(sendResult));
+		String sendResult = new String(ds.encrypt("defaultSwitch\ntest\ntest".getBytes("UTF-8")),"UTF-8");
+        System.out.println("sendResult ：" + sendResult);
         
-        byte[] receiverResult = dr.decryption(sendResult);
+        byte[] receiverResult = dr.decryption(sendResult.getBytes("UTF-8"));
         System.out.println("receiverResult : "+new String (receiverResult,"UTF-8"));
         
         byte[] sendResult2 = dr.encrypt("Hello".getBytes("UTF-8"));
