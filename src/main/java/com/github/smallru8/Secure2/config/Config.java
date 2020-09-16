@@ -106,4 +106,13 @@ public class Config {
 		}
 	}
 	
+	public void saveConf() {
+		try {
+			pro.store(new BufferedOutputStream(new FileOutputStream(confPath)),"Save Configs File.");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
