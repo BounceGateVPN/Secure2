@@ -79,6 +79,7 @@ public class Config {
 				host = "jdbc:sqlite:config/Secure.db";
 				pro.put("user", userName);
 				pro.put("passwd", passwd);
+				pro.put("switch", switchName);
 			}
 		    try {
 		    	pro.store(new BufferedOutputStream(new FileOutputStream(confPath)),"Save Configs File.");
@@ -103,6 +104,7 @@ public class Config {
 			//port = Integer.parseInt(pro.getProperty("port"));
 			userName = pro.getProperty("user");
 			passwd = pro.getProperty("passwd");
+			switchName = pro.getProperty("switch");
 		}
 	}
 	
