@@ -11,12 +11,13 @@ import java.util.Properties;
 
 public class Config {
 	public enum ConfType{
-		CLIENT,SERVER,ROUTER
+		CLIENT,SERVER,ROUTER,INTERFACE
 	}
 	
 	private static String Path0 = "config/server/";
 	private static String Path1 = "config/client/";
 	private static String Path2 = "config/router/";
+	private static String Path3 = "config/interface/";
 	
 	/**
 	 * 存 連線名稱/switch名稱
@@ -34,6 +35,11 @@ public class Config {
 	public String netmask = "255.255.255.0";
 	public String routingTable = "";	//gateway feild is switch or interface
 	
+	//for RouterInterface
+	public String InterfaceIP = "192.168.87.2";
+	public String InterfaceNetmask = "255.255.255.0";
+	public String InterfaceGateway = "192.168.87.1";
+	
 	private String confPath;
 	
 	/**
@@ -42,8 +48,10 @@ public class Config {
 	public Config() {
 		if(!new File("config").exists())
 			new File("config").mkdirs();
-		if(!new File("config/server").exists())
+		if(!new File("config/router").exists())
 			new File("config/router").mkdirs();
+		if(!new File("config/interface").exists())
+			new File("config/interface").mkdirs();
 		if(!new File("config/server").exists())
 			new File("config/server").mkdirs();
 		if(!new File("config/client").exists())
@@ -68,17 +76,24 @@ public class Config {
 			confPath = Path1+confName+".conf";
 		else if(type == ConfType.SERVER)
 			confPath = Path0+confName+".conf";
-		else
+		else if(type == ConfType.ROUTER)
 			confPath = Path2+confName+".conf";
+		else
+			confPath = Path3+confName+".conf";
 		try {
 			pro.load(new BufferedInputStream(new FileInputStream(confPath)));
 		} catch (FileNotFoundException e) {
-			if(type == ConfType.CLIENT) {
+			if(type == ConfType.CLIENT || type == ConfType.INTERFACE) {
 				pro.put("ip", host);
 				pro.put("port", ""+port);
 				pro.put("switch", switchName);
 				pro.put("user", userName);
 				pro.put("passwd", passwd);
+				if(type == ConfType.INTERFACE) {
+					pro.put("InterfaceIP", InterfaceIP);
+					pro.put("InterfaceNetmask", InterfaceNetmask);
+					pro.put("InterfaceGateway", InterfaceGateway);
+				}
 			}else if(type == ConfType.SERVER) {
 				pro.put("SQL", "false");
 				pro.put("host", "jdbc:sqlite:config/Secure.db");
@@ -104,12 +119,17 @@ public class Config {
 		    i.printStackTrace();
 		} 
 		
-		if(type == ConfType.CLIENT) {
+		if(type == ConfType.CLIENT || type == ConfType.INTERFACE ) {
 			host = pro.getProperty("ip");
 			port = Integer.parseInt(pro.getProperty("port"));
 			switchName = pro.getProperty("switch");
 			userName = pro.getProperty("user");
 			passwd = pro.getProperty("passwd");
+			if(type == ConfType.INTERFACE) {
+				InterfaceIP = pro.getProperty("InterfaceIP");
+				InterfaceNetmask = pro.getProperty("InterfaceNetmask");
+				InterfaceGateway = pro.getProperty("InterfaceGateway");
+			}
 		}else if(type == ConfType.SERVER) {
 			SQLFlag = pro.getProperty("SQL").equalsIgnoreCase("true");
 			host = pro.getProperty("host");
